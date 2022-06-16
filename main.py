@@ -15,23 +15,21 @@ master.resizable(True, False)
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks,interval, clickTime, button):
-    if button == "PY_VAR3":
-        button = "left"
-    print(button)
     global stop_thread
     time_to = {"s": 1, "min": 60, "h": 360}
-    time.sleep(3)
+    time.sleep(2)
     while True:
         
         if stop_thread:
             break
-        #print(type(clicks), type(interval), type(button))
+        
         if clickTime == "ms":
             pyautogui.click(clicks=clicks, interval=interval/60, button=button)
         else:
             pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
         
 stop_thread = False
+
 #fuction which changes Start to Stop sign on the main button.
 def switch():
     global stop_thread
@@ -43,17 +41,13 @@ def switch():
     
     start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get()))
     
-    
     if is_on:
         button.config(text="STOP autoclicker (F6)") 
-        #print(f"Interval: {interval.get()}")  #currently testing if I can get all of the data from my widgets
-        #print(f"current button: {current_mousebutton}")
-        #print(f"{var.get()} clicks in a row")
-        #print(f"time measurement in: {clickTime.get()}")
-        #print((int(var.get()), int(interval.get()), current_mousebutton, clickTime.get()))
         is_on = False
         stop_thread = False
+        print("Started autoclicker!")
         start_clicking.start()
+        
         
     else:
         button.config(text="START autoclicker (F6)")
@@ -81,6 +75,7 @@ button.pack(pady=15)
 #How many clicks in a row
 labelfreq = tkinter.Label(frame, text="Clicking frequancy:", font=("Times New Roman", 10))
 var = tkinter.IntVar(None, 1)
+
 radiobutton1 = tkinter.Radiobutton(frame, text="One click", value=1, variable=var)
 radiobutton2 = tkinter.Radiobutton(frame, text="Two clicks", value=2, variable=var)
 radiobutton3 = tkinter.Radiobutton(frame, text="Three clicks", value=3, variable=var)
@@ -90,29 +85,28 @@ radiobutton1.pack(anchor="w")
 radiobutton2.pack(anchor="w")
 radiobutton3.pack(anchor="w")
 
-#Interval gui
+#Interval
 frame_clickInt = tkinter.Frame(master)
 frame_clickInt.place(x= 160, y=150)
 labelInt = tkinter.Label(frame_clickInt, text="Interval between clicks", font=("Times New Roman", 10))
-default_interval_value = tkinter.IntVar(None, 100)
+
+default_interval_value = tkinter.IntVar(None, 60)
 default_interval_measure = tkinter.StringVar(None, "ms")
+
 interval = tkinter.Spinbox(frame_clickInt, from_=1, to=3000, width=8, textvariable=default_interval_value, )
 clickTime = tkinter.Spinbox(frame_clickInt, values=["ms", 's', 'min', 'h'], width=5, textvariable=default_interval_measure, state='readonly')
 
 labelInt.pack(padx=10)
-
 interval.pack(padx=10, side="left")
 clickTime.pack(padx=10, side="left")
-
-#currently selected mousebutton, by default its left
-#current_mousebutton = "left"
 
 #choosing button
 frame_button = tkinter.Frame(master)
 frame_button.place(x=160, y= 210)
 label_button = tkinter.Label(frame_button, text="Choose mousebutton:", font=("Times New Roman", 10))
-current_mousebutton = tkinter.StringVar(frame_button, value="left")
-#current_mousebutton.set("left")
+
+current_mousebutton = tkinter.StringVar(frame_button, value="left") #currently selected mousebutton, by default its left
+
 frame_button_L = tkinter.Button(frame_button, text="Left", command=lambda : change_mousebutton("left"), activeforeground="red")
 frame_button_R = tkinter.Button(frame_button, text="Right", command=lambda : change_mousebutton("right"), activeforeground="red")
 frame_button_M = tkinter.Button(frame_button, text="Middle", command=lambda : change_mousebutton("middle"), activeforeground="red")
@@ -126,11 +120,15 @@ frame_button_R.pack(side="left", padx=7)
 frame_cursor = tkinter.Frame(master)
 frame_cursor.place(x=10, y=277)
 labelCur = tkinter.Label(frame_cursor, text="Choose your mouse position:", width=38)
-var2 = tkinter.StringVar(None, "current")
+
+var2 = tkinter.StringVar(None, "current") #where to click
+
 radioCurrent = tkinter.Radiobutton(frame_cursor, text="Current position", value="current", variable=var2)
 radioChoose = tkinter.Radiobutton(frame_cursor, text="Choose position", value="choose", variable=var2)
+
 labelCur.pack(anchor="w", padx=10)
 radioCurrent.pack(side="left")
 radioChoose.pack(side="left")
 
+#mainloop method
 master.mainloop()
