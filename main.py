@@ -150,7 +150,7 @@ radioChoose.pack(side="left")
 frame_cursor_Entry = tkinter.Frame(master)
 frame_cursor_Entry.place(x=150, y=350)
 
-
+#test
 validation2 = frame_cursor_Entry.register(only_numbers)
 
 
