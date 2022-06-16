@@ -155,9 +155,9 @@ validation2 = frame_cursor_Entry.register(only_numbers)
 
 
 lableX = tkinter.Label(frame_cursor_Entry, text="X")
-x_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=5, validate="key", validatecommand=(validation2, '%S'))
+x_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=5, validate="key", validatecommand=(validation2, '%S'), state="disabled")
 lableY = tkinter.Label(frame_cursor_Entry, text="Y")
-y_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=6, validate="key", validatecommand=(validation2, '%S'))
+y_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=6, validate="key", validatecommand=(validation2, '%S'), state="disabled")
 
 lableX.pack(side="left")
 x_axis.pack(side="left")
