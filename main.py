@@ -60,6 +60,9 @@ def change_mousebutton(button_new):
     global current_mousebutton
     current_mousebutton = button_new
     
+def only_numbers(char):
+    return char.isdigit()
+
 
 #variable for text change on main button
 is_on = True
@@ -92,8 +95,10 @@ labelInt = tkinter.Label(frame_clickInt, text="Interval between clicks", font=("
 
 default_interval_value = tkinter.IntVar(None, 60)
 default_interval_measure = tkinter.StringVar(None, "ms")
+print(default_interval_value.get())
+validation1 = frame_clickInt.register(only_numbers)
 
-interval = tkinter.Spinbox(frame_clickInt, from_=1, to=3000, width=8, textvariable=default_interval_value, )
+interval = tkinter.Spinbox(frame_clickInt, from_=1, to=3000, width=8, textvariable=default_interval_value, validate="key", validatecommand=(validation1, '%S'))
 clickTime = tkinter.Spinbox(frame_clickInt, values=["ms", 's', 'min', 'h'], width=5, textvariable=default_interval_measure, state='readonly')
 
 labelInt.pack(padx=10)
@@ -122,13 +127,42 @@ frame_cursor.place(x=10, y=277)
 labelCur = tkinter.Label(frame_cursor, text="Choose your mouse position:", width=38)
 
 var2 = tkinter.StringVar(None, "current") #where to click
+def unresponsive():
+    global x_axis
+    global y_axis
+    x_axis.config(state="disabled")
+    y_axis.config(state="disabled")
 
-radioCurrent = tkinter.Radiobutton(frame_cursor, text="Current position", value="current", variable=var2)
-radioChoose = tkinter.Radiobutton(frame_cursor, text="Choose position", value="choose", variable=var2)
+def responsive():
+    global x_axis
+    global y_axis
+    x_axis.config(state="normal")
+    y_axis.config(state="normal")
+
+radioCurrent = tkinter.Radiobutton(frame_cursor, text="Current position", value="current", variable=var2, command=lambda: unresponsive())
+radioChoose = tkinter.Radiobutton(frame_cursor, text="Choose position", value="choose", variable=var2, command= lambda: responsive())
 
 labelCur.pack(anchor="w", padx=10)
 radioCurrent.pack(side="left")
 radioChoose.pack(side="left")
+
+#entry for cordinates which to click
+frame_cursor_Entry = tkinter.Frame(master)
+frame_cursor_Entry.place(x=150, y=350)
+
+
+validation2 = frame_cursor_Entry.register(only_numbers)
+
+
+lableX = tkinter.Label(frame_cursor_Entry, text="X")
+x_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=5, validate="key", validatecommand=(validation2, '%S'))
+lableY = tkinter.Label(frame_cursor_Entry, text="Y")
+y_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=6, validate="key", validatecommand=(validation2, '%S'))
+
+lableX.pack(side="left")
+x_axis.pack(side="left")
+lableY.pack(side="left")
+y_axis.pack(side="left")
 
 #mainloop method
 master.mainloop()
