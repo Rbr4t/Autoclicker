@@ -26,15 +26,13 @@ def clicking(clicks, interval, clickTime, button, x_cord, y_cord):
             break
         
         if clickTime == "ms":
-            try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
-            except: pyautogui.click(clicks=clicks, interval=interval/60, button=button)
+            #try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
+            pyautogui.click(clicks=clicks, interval=interval/60, button=button)
         else:
-            try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval*time_to[clickTime], button=button)
-            except: pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
+            pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval*time_to[clickTime], button=button)
+            #except: pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
 
-    
-        
-            
+          
           
 stop_thread = False
 
