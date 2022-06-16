@@ -14,20 +14,28 @@ master.geometry(f"{width}x{height}")
 master.resizable(True, False)
 
 #function which creates a new thread and starts clicking where the cursor is.
-def clicking(clicks,interval, clickTime, button):
+def clicking(clicks, interval, clickTime, button, x_cord, y_cord):
     global stop_thread
     time_to = {"s": 1, "min": 60, "h": 360}
     time.sleep(2)
-    while True:
+    print((x_cord, y_cord))
+    
+    for x in range(10):
         
         if stop_thread:
             break
         
         if clickTime == "ms":
-            pyautogui.click(clicks=clicks, interval=interval/60, button=button)
+            try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
+            except: pyautogui.click(clicks=clicks, interval=interval/60, button=button)
         else:
-            pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
+            try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval*time_to[clickTime], button=button)
+            except: pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
+
+    
         
+            
+          
 stop_thread = False
 
 #fuction which changes Start to Stop sign on the main button.
@@ -38,14 +46,19 @@ def switch():
     global current_mousebutton
     global var #clicks in row
     global clickTime #in what units time is measured
-    
-    start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get()))
+    global x_axis, y_axis
+    print(x_axis.get())
+    start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get(), x_axis.get(), y_axis.get()))
     
     if is_on:
         button.config(text="STOP autoclicker (F6)") 
         is_on = False
         stop_thread = False
         print("Started autoclicker!")
+        try:
+            print((int(x_axis.get()), int(y_axis.get())))
+        except:
+            pass
         start_clicking.start()
         
         
@@ -126,21 +139,23 @@ frame_cursor = tkinter.Frame(master)
 frame_cursor.place(x=10, y=277)
 labelCur = tkinter.Label(frame_cursor, text="Choose your mouse position:", width=38)
 
-var2 = tkinter.StringVar(None, "current") #where to click
+static = tkinter.StringVar(None, "current") #where to click
 def unresponsive():
     global x_axis
     global y_axis
+    static.set("current")
     x_axis.config(state="disabled")
     y_axis.config(state="disabled")
 
 def responsive():
     global x_axis
     global y_axis
+    static.set("choose")
     x_axis.config(state="normal")
     y_axis.config(state="normal")
 
-radioCurrent = tkinter.Radiobutton(frame_cursor, text="Current position", value="current", variable=var2, command=lambda: unresponsive())
-radioChoose = tkinter.Radiobutton(frame_cursor, text="Choose position", value="choose", variable=var2, command= lambda: responsive())
+radioCurrent = tkinter.Radiobutton(frame_cursor, text="Current position", value="current", variable=static, command=lambda: unresponsive())
+radioChoose = tkinter.Radiobutton(frame_cursor, text="Choose position", value="choose", variable=static, command= lambda: responsive())
 
 labelCur.pack(anchor="w", padx=10)
 radioCurrent.pack(side="left")
@@ -150,12 +165,13 @@ radioChoose.pack(side="left")
 frame_cursor_Entry = tkinter.Frame(master)
 frame_cursor_Entry.place(x=150, y=350)
 
-#test
+
 validation2 = frame_cursor_Entry.register(only_numbers)
 
 
 lableX = tkinter.Label(frame_cursor_Entry, text="X")
 x_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=5, validate="key", validatecommand=(validation2, '%S'), state="disabled")
+
 lableY = tkinter.Label(frame_cursor_Entry, text="Y")
 y_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=6, validate="key", validatecommand=(validation2, '%S'), state="disabled")
 
