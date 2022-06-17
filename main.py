@@ -1,6 +1,6 @@
 # Autoclicker program written in Python programming language
-import pyautogui, tkinter, time, threading, keyboard
-
+import pyautogui, tkinter, threading, keyboard
+from time import sleep
 master = tkinter.Tk()
 master.title("AUTOCLICKER")
 master.config(bg="#45d9b6")
@@ -8,16 +8,23 @@ master.config(bg="#45d9b6")
 width = 350
 height = 400
 master.geometry(f"{width}x{height}")
-master.resizable(True, False)
+master.resizable(False, False)
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
     global stop_thread
-    time_to = {"s": 1, "min": 60, "h": 360}
-    time.sleep(2)
     
-    while not stop_thread or keyboard.is_pressed("f6"):
         
+    time_to = {"s": 1, "min": 60, "h": 360}
+    sleep(2)
+    
+    while not stop_thread and threading.main_thread().is_alive():
+        def stop():
+            global stop_thread
+            stop_thread = True
+            
+            
+        keyboard.add_hotkey('f6', lambda: stop())
         if clickTime == "ms":
             try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
             except: pyautogui.click(clicks=clicks, interval=interval/60, button=button)
@@ -42,7 +49,7 @@ def switch():
     except: 
         try: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get()))
         except: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton))
-        
+    
     if is_on:
         button.config(text="STOP autoclicker (F6)") 
         is_on = False
@@ -50,7 +57,6 @@ def switch():
         print("Started autoclicker!")
         
         start_clicking.start()
-        
         
     else:
         button.config(text="START autoclicker (F6)")
@@ -66,9 +72,14 @@ def change_mousebutton(button_new):
 def only_numbers(char):
     return char.isdigit()
 
-
 #variable for text change on main button
 is_on = True
+
+#check if f6 is pressed, if so then stop
+def f6(e):
+    print("f6")
+    stop_thread = True
+master.bind("<F6>", f6)
 
 #main button
 frame = tkinter.Frame(master)
