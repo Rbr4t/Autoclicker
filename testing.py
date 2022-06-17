@@ -1,4 +1,6 @@
 
-import pyautogui
+import keyboard
 while 1:
-    print(pyautogui.position())
+    if keyboard.is_pressed("f6"):
+        print("Working")
+        break

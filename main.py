@@ -1,8 +1,5 @@
 # Autoclicker program written in Python programming language
-import pyautogui
-import tkinter
-import time
-import threading
+import pyautogui, tkinter, time, threading, keyboard
 
 master = tkinter.Tk()
 master.title("AUTOCLICKER")
@@ -14,26 +11,21 @@ master.geometry(f"{width}x{height}")
 master.resizable(True, False)
 
 #function which creates a new thread and starts clicking where the cursor is.
-def clicking(clicks, interval, clickTime, button, x_cord, y_cord):
+def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
     global stop_thread
     time_to = {"s": 1, "min": 60, "h": 360}
     time.sleep(2)
-    print((x_cord, y_cord))
     
-    for x in range(10):
-        
-        if stop_thread:
-            break
+    while not stop_thread or keyboard.is_pressed("f6"):
         
         if clickTime == "ms":
-            #try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
-            pyautogui.click(x= x_cord, y= y_cord, clicks=clicks, interval=interval/60, button=button)
+            try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
+            except: pyautogui.click(clicks=clicks, interval=interval/60, button=button)
         else:
-            pyautogui.click( clicks=clicks, interval=interval*time_to[clickTime], button=button)
-            #except: pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
-
-          
-          
+            try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval*time_to[clickTime], button=button)
+            except: pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
+        
+    
 stop_thread = False
 
 #fuction which changes Start to Stop sign on the main button.
@@ -45,18 +37,18 @@ def switch():
     global var #clicks in row
     global clickTime #in what units time is measured
     global x_axis, y_axis
-    print(x_axis.get())
-    start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get(), x_axis.get(), y_axis.get()))
     
+    try: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get(), int(x_axis.get()), int(y_axis.get())))
+    except: 
+        try: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get()))
+        except: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton))
+        
     if is_on:
         button.config(text="STOP autoclicker (F6)") 
         is_on = False
         stop_thread = False
         print("Started autoclicker!")
-        try:
-            print((int(x_axis.get()), int(y_axis.get())))
-        except:
-            pass
+        
         start_clicking.start()
         
         
@@ -81,7 +73,6 @@ is_on = True
 #main button
 frame = tkinter.Frame(master)
 frame.place(x= 10, y=150)
-
 button = tkinter.Button(master, text="START autoclicker (F6)", width=25, height=5, command= lambda: switch())
 
 button.pack(pady=15)
