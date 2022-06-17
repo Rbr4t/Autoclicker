@@ -27,9 +27,9 @@ def clicking(clicks, interval, clickTime, button, x_cord, y_cord):
         
         if clickTime == "ms":
             #try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
-            pyautogui.click(clicks=clicks, interval=interval/60, button=button)
+            pyautogui.click(x= x_cord, y= y_cord, clicks=clicks, interval=interval/60, button=button)
         else:
-            pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval*time_to[clickTime], button=button)
+            pyautogui.click( clicks=clicks, interval=interval*time_to[clickTime], button=button)
             #except: pyautogui.click(clicks=clicks, interval=interval*time_to[clickTime], button=button)
 
           
@@ -106,7 +106,6 @@ labelInt = tkinter.Label(frame_clickInt, text="Interval between clicks", font=("
 
 default_interval_value = tkinter.IntVar(None, 60)
 default_interval_measure = tkinter.StringVar(None, "ms")
-print(default_interval_value.get())
 validation1 = frame_clickInt.register(only_numbers)
 
 interval = tkinter.Spinbox(frame_clickInt, from_=1, to=3000, width=8, textvariable=default_interval_value, validate="key", validatecommand=(validation1, '%S'))
@@ -138,6 +137,7 @@ frame_cursor.place(x=10, y=277)
 labelCur = tkinter.Label(frame_cursor, text="Choose your mouse position:", width=38)
 
 static = tkinter.StringVar(None, "current") #where to click
+
 def unresponsive():
     global x_axis
     global y_axis
