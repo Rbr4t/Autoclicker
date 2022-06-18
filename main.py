@@ -9,8 +9,8 @@ width = 350
 height = 400
 master.geometry(f"{width}x{height}")
 master.resizable(False, False)
-<<<<<<< HEAD
 
+#stuff I got from internet and this is what should make .exe file functional
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     base_path = getattr(
@@ -30,10 +30,6 @@ def resource_path2(relative_path):
     return os.path.join(base_path, relative_path)
 
 master.iconbitmap(resource_path2('cursorico.ico'))
-
-
-master.iconbitmap('cursorico.ico')                      #iconphoto(False, tkinter.            iconphoto(file='cursorico.ico'))
-
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
