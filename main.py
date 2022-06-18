@@ -3,12 +3,13 @@ import pyautogui, tkinter, threading, keyboard
 from time import sleep
 master = tkinter.Tk()
 master.title("AUTOCLICKER")
-master.config(bg="#45d9b6")
+master.config(bg="#6fd189")
 
 width = 350
 height = 400
 master.geometry(f"{width}x{height}")
 master.resizable(False, False)
+master.iconphoto(False, tkinter.PhotoImage(file="Autoclicker\cursor.png"))
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
@@ -22,9 +23,10 @@ def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
         def stop():
             global stop_thread
             stop_thread = True
-            
+            switch()
             
         keyboard.add_hotkey('f6', lambda: stop())
+        
         if clickTime == "ms":
             try: pyautogui.click(x=x_cord, y=y_cord, clicks=clicks, interval=interval/60, button=button)
             except: pyautogui.click(clicks=clicks, interval=interval/60, button=button)
@@ -54,7 +56,7 @@ def switch():
         button.config(text="STOP autoclicker (F6)") 
         is_on = False
         stop_thread = False
-        print("Started autoclicker!")
+        
         
         start_clicking.start()
         
@@ -62,7 +64,7 @@ def switch():
         button.config(text="START autoclicker (F6)")
         is_on = True
         stop_thread = True
-        print("Stopped autoclicker!")
+        
 
 #function for changing mousebutton
 def change_mousebutton(button_new):
@@ -74,12 +76,6 @@ def only_numbers(char):
 
 #variable for text change on main button
 is_on = True
-
-#check if f6 is pressed, if so then stop
-def f6(e):
-    print("f6")
-    stop_thread = True
-master.bind("<F6>", f6)
 
 #main button
 frame = tkinter.Frame(master)
@@ -102,7 +98,7 @@ radiobutton2.pack(anchor="w")
 radiobutton3.pack(anchor="w")
 
 #Interval
-frame_clickInt = tkinter.Frame(master)
+frame_clickInt = tkinter.Frame(master, height=60)
 frame_clickInt.place(x= 160, y=150)
 labelInt = tkinter.Label(frame_clickInt, text="Interval between clicks", font=("Times New Roman", 10))
 
@@ -165,9 +161,7 @@ radioChoose.pack(side="left")
 frame_cursor_Entry = tkinter.Frame(master)
 frame_cursor_Entry.place(x=150, y=350)
 
-
 validation2 = frame_cursor_Entry.register(only_numbers)
-
 
 lableX = tkinter.Label(frame_cursor_Entry, text="X")
 x_axis = tkinter.Entry(frame_cursor_Entry, bd=4, width=5, validate="key", validatecommand=(validation2, '%S'), state="disabled")
