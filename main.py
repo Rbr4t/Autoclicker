@@ -1,5 +1,5 @@
 # Autoclicker program written in Python programming language
-import pyautogui, tkinter, threading, keyboard
+import pyautogui, tkinter, threading, keyboard, os
 from time import sleep
 master = tkinter.Tk()
 master.title("AUTOCLICKER")
@@ -9,7 +9,27 @@ width = 350
 height = 400
 master.geometry(f"{width}x{height}")
 master.resizable(False, False)
-master.iconphoto(False, tkinter.PhotoImage(file='cursor.png'))
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(
+        sys,
+        '_MEIPASS',
+        os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+def resource_path2(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+master.iconbitmap(resource_path2('cursorico.ico'))
+
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
