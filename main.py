@@ -9,7 +9,7 @@ width = 350
 height = 400
 master.geometry(f"{width}x{height}")
 master.resizable(False, False)
-master.iconphoto(False, tkinter.PhotoImage(file="Autoclicker\cursor.png"))
+master.iconphoto(False, tkinter.PhotoImage(file='Autoclicker\cursor.png'))
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
@@ -46,9 +46,11 @@ def switch():
     global var #clicks in row
     global clickTime #in what units time is measured
     global x_axis, y_axis
-    
-    try: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get(), int(x_axis.get()), int(y_axis.get())))
-    except: 
+    global static
+    if static.get()=="choose":
+        try: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get(), int(x_axis.get()), int(y_axis.get())))
+        except: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton, int(x_axis.get()), int(y_axis.get())))
+    else:
         try: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton.get()))
         except: start_clicking = threading.Thread(target=clicking, args=(int(var.get()), int(interval.get()), clickTime.get(), current_mousebutton))
     
