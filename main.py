@@ -9,7 +9,7 @@ width = 350
 height = 400
 master.geometry(f"{width}x{height}")
 master.resizable(False, False)
-master.iconphoto(False, tkinter.PhotoImage(file='Autoclicker\cursor.png'))
+master.iconphoto(False, tkinter.PhotoImage(file='cursor.png'))
 
 #function which creates a new thread and starts clicking where the cursor is.
 def clicking(clicks, interval, clickTime, button, x_cord=None, y_cord=None):
