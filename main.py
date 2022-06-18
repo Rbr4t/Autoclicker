@@ -9,6 +9,7 @@ width = 350
 height = 400
 master.geometry(f"{width}x{height}")
 master.resizable(False, False)
+<<<<<<< HEAD
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -29,6 +30,9 @@ def resource_path2(relative_path):
     return os.path.join(base_path, relative_path)
 
 master.iconbitmap(resource_path2('cursorico.ico'))
+
+
+master.iconbitmap('cursorico.ico')                      #iconphoto(False, tkinter.            iconphoto(file='cursorico.ico'))
 
 
 #function which creates a new thread and starts clicking where the cursor is.
